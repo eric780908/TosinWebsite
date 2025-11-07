@@ -131,11 +131,13 @@ const performSwapImageViaRemoteRequest = ({ form, variation, productId }) => {
 				image: images[0],
 			})
 
-			replaceImage({
-				container: form,
-				image: images[1],
-				ctSwap: true,
-			})
+			if (form.closest('[data-hover="swap"]')) {
+				replaceImage({
+					container: form,
+					image: images[1],
+					ctSwap: true,
+				})
+			}
 		})
 }
 

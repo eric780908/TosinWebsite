@@ -1,13 +1,18 @@
 import { createElement } from '@wordpress/element'
 import { useBlockProps } from '@wordpress/block-editor'
+import { Spinner } from '@wordpress/components'
 
 import { __ } from 'ct-i18n'
 
-const Preview = ({ attributes }) => {
+const Preview = ({ attributes, blockData }) => {
 	const blockProps = useBlockProps({
 		className: 'ct-filter-widget-wrapper',
 	})
-	const { showResetButton, showPrices } = attributes
+	const { showResetButton, showPrices, showInputs } = attributes
+
+	if (!blockData) {
+		return <Spinner />
+	}
 
 	return (
 		<div {...blockProps}>
@@ -38,12 +43,51 @@ const Preview = ({ attributes }) => {
 					<input type="range" value={100} readOnly />
 				</div>
 
-				{showPrices ? (
-					<div className="ct-price-filter-inputs">
+				{showPrices && !showInputs ? (
+					<div className="ct-price-filter-values">
 						<span>Price:&nbsp;</span>
-						<span className="ct-price-filter-min">$10</span>
+						<span className="ct-price-filter-min">
+							{blockData.currency_symbol}10
+						</span>
 						<span>&nbsp;-&nbsp;</span>
-						<span className="ct-price-filter-max">$70</span>
+						<span className="ct-price-filter-max">
+							{blockData.currency_symbol}70
+						</span>
+					</div>
+				) : null}
+
+				{showInputs ? (
+					<div
+						class="ct-price-filter-inputs"
+						data-currency-position={blockData.currency_position}>
+						<div class="ct-price-filter-input-min">
+							Minimum:
+							<div class="ct-price-filter-input ct-pseudo-input">
+								<small>{blockData.currency_symbol}</small>
+								<input
+									type="number"
+									value="10"
+									min="0"
+									max="70"
+									step="1"
+									name="min_price"
+								/>
+							</div>
+						</div>
+						<div class="ct-price-filter-input-max">
+							Maximum:
+							<div class="ct-price-filter-input ct-pseudo-input">
+								<small>{blockData.currency_symbol}</small>
+								<input
+									type="number"
+									value="70"
+									min="0"
+									max="70"
+									step="1"
+									name="max_price"
+								/>
+							</div>
+						</div>
 					</div>
 				) : null}
 			</div>

@@ -2,6 +2,9 @@ import { registerDynamicChunk } from 'blocksy-frontend'
 import { fetchDataFor } from './ajax-filter-public'
 import { sprintf } from '@wordpress/i18n/build/sprintf'
 
+let prevMinVal = null
+let prevMaxVal = null
+
 const formatPrice = (price) => {
 	const { priceFormat, currency, thousand } =
 		ct_localizations.blocksy_woo_extra_price_filters
@@ -47,6 +50,13 @@ const handleDrag = (el, event, { parent, minEl, maxEl }) => {
 	const minInput = parent.querySelector('.ct-price-filter-min')
 	const maxInput = parent.querySelector('.ct-price-filter-max')
 
+	const minNumberInput = parent
+		.closest('.ct-price-filter')
+		.querySelector('.ct-price-filter-input-min')
+	const maxNumberInput = parent
+		.closest('.ct-price-filter')
+		.querySelector('.ct-price-filter-input-max')
+
 	const min = parseFloat(el.min)
 	const max = parseFloat(el.max)
 
@@ -71,6 +81,14 @@ const handleDrag = (el, event, { parent, minEl, maxEl }) => {
 	minEl.value = minVal
 	maxEl.value = maxVal
 
+	if (minNumberInput) {
+		minNumberInput.value = Math.min(minVal, max)
+	}
+
+	if (maxNumberInput) {
+		maxNumberInput.value = Math.max(maxVal, min)
+	}
+
 	if (el.name === 'min_price' && minVal >= maxVal) {
 		maxEl.value = Math.min(minVal + 1, max)
 
@@ -88,6 +106,64 @@ const handleDrag = (el, event, { parent, minEl, maxEl }) => {
 	}
 }
 
+const handleInputChange = (el, event, { parent, minEl, maxEl }) => {
+	const minInput = parent.querySelector('.ct-price-filter-min')
+	const maxInput = parent.querySelector('.ct-price-filter-max')
+
+	const min = parseFloat(minEl.min)
+	const max = parseFloat(maxEl.max)
+
+	let minVal = parseFloat(minEl.value)
+	let maxVal = parseFloat(maxEl.value)
+	let inputVal = parseFloat(el.value)
+
+	const isMin = el.name === 'min_price'
+	const isMax = el.name === 'max_price'
+
+	if (
+		(isMax && el.value === prevMaxVal) ||
+		(isMin && el.value === prevMinVal)
+	) {
+		return
+	}
+
+	if (isMin) {
+		minVal = Math.max(min, Math.min(inputVal, maxVal - 1))
+		minEl.value = minVal
+
+		if (minVal >= maxVal) {
+			maxVal = Math.min(minVal + 1, max)
+			maxEl.value = maxVal
+		}
+	}
+
+	if (isMax) {
+		maxVal = Math.min(max, Math.max(inputVal, minVal + 1))
+		maxEl.value = maxVal
+
+		if (maxVal <= minVal) {
+			minVal = Math.max(maxVal - 1, min)
+			minEl.value = minVal
+		}
+	}
+
+	if (minInput) minInput.innerText = formatPrice(minVal)
+	if (maxInput) maxInput.innerText = formatPrice(maxVal)
+
+	const minPos = Math.max(((minVal - min) / (max - min)) * 100, 0)
+	const maxPos = Math.min(((maxVal - min) / (max - min)) * 100, 100)
+
+	updateRangeTrack(parent, minPos, maxPos)
+	updateMinThumb(parent, minPos, formatPrice(minVal))
+	updateMaxThumb(parent, maxPos, formatPrice(maxVal))
+
+	setTimeout(() => {
+		minEl.dispatchEvent(new Event('change', { bubbles: true }))
+	}, 0)
+
+	el.value = isMin ? minVal : maxVal
+}
+
 const handleMount = (el, { event }) => {
 	const isAjax = document.querySelector('[data-ajax-filters*="yes"]')
 	const parent = el.closest('.ct-price-filter')
@@ -98,7 +174,25 @@ const handleMount = (el, { event }) => {
 		if (el.type === 'range') {
 			handleDrag(el, event, { parent, minEl, maxEl })
 		}
+
 		return
+	}
+
+	if (el.type === 'number') {
+		if (event.type === 'blur') {
+			handleInputChange(el, event, { parent, minEl, maxEl })
+		}
+
+		if (event.type === 'focus') {
+			prevMinVal = minEl.value
+			prevMaxVal = maxEl.value
+
+			return
+		}
+
+		if (event.type === 'keypress' && event.key === 'Enter') {
+			el.blur()
+		}
 	}
 
 	if (event.type === 'change') {

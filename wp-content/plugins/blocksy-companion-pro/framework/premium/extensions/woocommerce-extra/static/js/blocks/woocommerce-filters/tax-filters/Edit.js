@@ -82,6 +82,13 @@ const Edit = ({ attributes, setAttributes }) => {
 			})
 		}
 
+		// Handle deprecated taxonomy value for backward compatibility
+		if (attributes.taxonomy === 'product_brands') {
+			setAttributes({
+				taxonomy: 'product_brand',
+			})
+		}
+
 		if (!attributes.taxonomy) {
 			setAttributes({
 				taxonomy: 'product_cat',

@@ -1,69 +1,77 @@
-import $ from 'jquery'
+const onFoundVariation = ({ container, favoritesButton, eventData }) => {
+	const { variation_id, attributes } = eventData
 
-export const computeFavorite = (
+	const wishlist = ct_localizations.blc_ext_wish_list.list.items
+	const additional_attrs = {
+		...attributes,
+	}
+
+	Object.keys(attributes).forEach((key) => {
+		if (attributes[key] === '') {
+			additional_attrs[key.trim()] = container
+				.querySelector(`select[name="${key}"]`)
+				.value.trim()
+		}
+	})
+
+	const item = wishlist.find(
+		(w) =>
+			w.id === variation_id &&
+			Object.keys(w?.attributes || {}).every(
+				(aKey) =>
+					additional_attrs?.[`attribute_${aKey}`] &&
+					w.attributes[`${aKey}`] &&
+					w.attributes[`${aKey}`] ===
+						additional_attrs[`attribute_${aKey}`]
+			)
+	)
+
+	if (item) {
+		favoritesButton.dataset.buttonState = 'active'
+	} else {
+		favoritesButton.dataset.buttonState = ''
+	}
+}
+
+const onResetData = ({ el, favoritesButton, productId }) => {
+	const hasAttributes = hasAttributeSelected(el)
+
+	setTimeout(() => {
+		if (hasAttributes) {
+			favoritesButton.dataset.buttonState = 'disabled'
+		} else {
+			favoritesButton.dataset.id = productId
+			favoritesButton.dataset.buttonState = ''
+
+			const wishlist = ct_localizations.blc_ext_wish_list.list.items
+
+			const item = wishlist.find(
+				(i) => i.id === productId && !i.attributes
+			)
+
+			if (item) {
+				favoritesButton.dataset.buttonState = 'active'
+			}
+		}
+	})
+}
+
+export const computeFavorite = ({
 	el,
 	form,
 	container,
 	favoritesButton,
-	productId
-) => {
-	$(form).on('found_variation', (e, variation) => {
-		const { variation_id, attributes } = variation
+	productId,
+	type,
+	eventData,
+}) => {
+	if (type === 'found_variation') {
+		onFoundVariation({ container, favoritesButton, eventData })
+	}
 
-		const wishlist = ct_localizations.blc_ext_wish_list.list.items
-		const additional_attrs = {
-			...attributes,
-		}
-
-		Object.keys(attributes).forEach((key) => {
-			if (attributes[key] === '') {
-				additional_attrs[key.trim()] = container
-					.querySelector(`select[name="${key}"]`)
-					.value.trim()
-			}
-		})
-
-		const item = wishlist.find(
-			(w) =>
-				w.id === variation_id &&
-				Object.keys(w?.attributes || {}).every(
-					(aKey) =>
-						additional_attrs?.[`attribute_${aKey}`] &&
-						w.attributes[`${aKey}`] &&
-						w.attributes[`${aKey}`] ===
-							additional_attrs[`attribute_${aKey}`]
-				)
-		)
-
-		if (item) {
-			favoritesButton.dataset.buttonState = 'active'
-		} else {
-			favoritesButton.dataset.buttonState = ''
-		}
-	})
-
-	$(form).on('reset_data', (e, variation) => {
-		const hasAttributes = hasAttributeSelected(el)
-
-		setTimeout(() => {
-			if (hasAttributes) {
-				favoritesButton.dataset.buttonState = 'disabled'
-			} else {
-				favoritesButton.dataset.id = productId
-				favoritesButton.dataset.buttonState = ''
-
-				const wishlist = ct_localizations.blc_ext_wish_list.list.items
-
-				const item = wishlist.find(
-					(i) => i.id === productId && !i.attributes
-				)
-
-				if (item) {
-					favoritesButton.dataset.buttonState = 'active'
-				}
-			}
-		})
-	})
+	if (type === 'reset_data') {
+		onResetData({ el, favoritesButton, productId })
+	}
 }
 
 export const hasAttributeSelected = (el) =>

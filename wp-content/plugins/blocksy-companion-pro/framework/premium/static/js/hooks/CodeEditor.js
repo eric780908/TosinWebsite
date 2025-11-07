@@ -313,6 +313,10 @@ export const mountCodeEditor = () => {
 				)
 			}
 
+			if (!editorToolbar) {
+				return
+			}
+
 			const maybeTrigger = editorToolbar.querySelector(
 				'.blocksy-code-editor-trigger'
 			)

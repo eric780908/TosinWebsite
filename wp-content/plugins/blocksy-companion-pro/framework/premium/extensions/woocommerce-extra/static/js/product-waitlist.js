@@ -157,7 +157,7 @@ const handleUnsubscribe = (el) => {
 	body.append('action', 'blc_waitlist_unsubscribe')
 	body.append('token', el.dataset.token)
 
-	const isAccountAction = el.closest('.waitlist-product-actions')
+	const isAccountAction = el.closest('.waitlist-product-actions, .waitlist-product-mobile-actions')
 	const waitlist = isAccountAction || el.closest('.ct-product-waitlist')
 	waitlist.dataset.loading = ''
 

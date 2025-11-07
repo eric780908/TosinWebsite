@@ -1,9 +1,10 @@
-import { createElement } from '@wordpress/element'
+import { createElement, useState, useEffect } from '@wordpress/element'
 
 import { __ } from 'ct-i18n'
 import { registerBlockType } from '@wordpress/blocks'
 import { InspectorControls } from '@wordpress/block-editor'
 import { Panel, PanelBody, ToggleControl } from '@wordpress/components'
+import cachedFetch from 'ct-wordpress-helpers/cached-fetch'
 import Preview from './Preview'
 
 registerBlockType('blocksy/woocommerce-price-filter', {
@@ -41,17 +42,38 @@ registerBlockType('blocksy/woocommerce-price-filter', {
 			default: true,
 		},
 
+		showInputs: {
+			type: 'boolean',
+			default: false,
+		},
+
 		showResetButton: {
 			type: 'boolean',
 			default: false,
 		},
 	},
 	edit: ({ attributes, setAttributes }) => {
-		const { showTooltips, showResetButton, showPrices } = attributes
+		const { showTooltips, showResetButton, showPrices, showInputs } =
+			attributes
+
+		const [blockData, setBlockData] = useState(null)
+
+		useEffect(() => {
+			cachedFetch(
+				`${wp.ajax.settings.url}?action=blc_ext_filters_get_block_data`,
+				{
+					type: 'price',
+				}
+			)
+				.then((response) => response.json())
+				.then(({ success, data }) => {
+					setBlockData(data)
+				})
+		}, [])
 
 		return (
 			<>
-				<Preview attributes={attributes} />
+				<Preview attributes={attributes} blockData={blockData} />
 				<InspectorControls>
 					<Panel header="Filter Settings">
 						<PanelBody>
@@ -68,15 +90,35 @@ registerBlockType('blocksy/woocommerce-price-filter', {
 
 						<PanelBody>
 							<ToggleControl
-								label={__('Show Prices', 'blocksy-companion')}
-								checked={showPrices}
+								label={__(
+									'Show Price Input Fields',
+									'blocksy-companion'
+								)}
+								checked={showInputs}
 								onChange={() =>
 									setAttributes({
-										showPrices: !showPrices,
+										showInputs: !showInputs,
 									})
 								}
 							/>
 						</PanelBody>
+
+						{!showInputs ? (
+							<PanelBody>
+								<ToggleControl
+									label={__(
+										'Show Price Range Text',
+										'blocksy-companion'
+									)}
+									checked={showPrices}
+									onChange={() =>
+										setAttributes({
+											showPrices: !showPrices,
+										})
+									}
+								/>
+							</PanelBody>
+						) : null}
 
 						<PanelBody>
 							<ToggleControl

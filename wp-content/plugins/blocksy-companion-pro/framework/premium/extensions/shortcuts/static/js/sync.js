@@ -43,7 +43,7 @@ wp.customize('shortcuts_bar_items', (val) => {
 						tablet: true,
 						mobile: true,
 					},
-					shortcutContainer
+					shortcutContainer.parentNode
 				)
 
 				let maybeLabel = shortcutContainer.querySelector('.ct-label')

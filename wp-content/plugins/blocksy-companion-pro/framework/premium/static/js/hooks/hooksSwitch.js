@@ -8,19 +8,30 @@ export const mountHooksSwitch = () => {
 	}
 
 	container.addEventListener('click', (e) => {
+		let maybeSwitch = null
+
 		if (e.target.classList.contains('ct-content-block-switch')) {
-			e.preventDefault()
-
-			const toggle = e.target
-			const postId = toggle.dataset.postId
-
-			let enabled = toggle.classList.contains('ct-active') ? 'no' : 'yes'
-
-			toggle.classList.toggle('ct-active')
-
-			fetch(
-				`${ct_localizations.ajax_url}?action=blocksy_content_blocksy_toggle&post_id=${postId}&enabled=${enabled}`
-			).then((r) => r.json())
+			maybeSwitch = e.target
 		}
+
+		if (!maybeSwitch) {
+			maybeSwitch = e.target.closest('.ct-content-block-switch')
+		}
+
+		if (!maybeSwitch) {
+			return
+		}
+
+		e.preventDefault()
+
+		const postId = maybeSwitch.dataset.postId
+
+		let enabled = maybeSwitch.classList.contains('ct-active') ? 'no' : 'yes'
+
+		maybeSwitch.classList.toggle('ct-active')
+
+		fetch(
+			`${ct_localizations.ajax_url}?action=blocksy_content_blocksy_toggle&post_id=${postId}&enabled=${enabled}`
+		).then((r) => r.json())
 	})
 }

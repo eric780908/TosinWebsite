@@ -22,6 +22,7 @@ import { collectVariablesForWishlistShareBox } from './sync/wishlist'
 import { collectVariablesForShareBox } from './sync/share-box'
 import { collectVariablesForShippingProgressBar } from './sync/shipping-progress-bar'
 import { collectVariablesForRelatedSlideshow } from './sync/related-slideshow'
+import { collectVariablesForCartReservedTimer } from './sync/cart-reserved-timer'
 
 ctEvents.on(
 	'ct:customizer:sync:collect-variable-descriptors',
@@ -44,6 +45,7 @@ ctEvents.on(
 			...collectVariablesForShareBox(),
 			...collectVariablesForShippingProgressBar(),
 			...collectVariablesForRelatedSlideshow(),
+			...collectVariablesForCartReservedTimer(),
 
 
 			// Single product type 2

@@ -1,7 +1,7 @@
 const gulp = require('gulp')
-const buildProcess = require('ct-build-process')
+const buildProcess = require('@creative-themes/build-process')
 const removeCode = require('gulp-remove-code')
-const shell = require('gulp-shell')
+const { execSync } = require('child_process')
 const glob = require('glob')
 const BundleAnalyzerPlugin =
 	require('webpack-bundle-analyzer').BundleAnalyzerPlugin
@@ -41,15 +41,6 @@ var options = {
 	packageType: 'wordpress_theme',
 	packageSlug: 'blocksy',
 	packageI18nSlug: 'blocksy',
-
-	browserSyncInitOptions: {
-		logSnippet: false,
-		port: 9669,
-		domain: 'localhost',
-		ui: {
-			port: 9068,
-		},
-	},
 
 	entries: [
 		{
@@ -189,280 +180,246 @@ var options = {
 			input: 'static/sass/frontend/main.scss',
 			output: 'static/bundle',
 			filename: 'main.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/5-modules/page-title/main.scss',
 			output: 'static/bundle',
 			filename: 'page-title.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/4-components/back-to-top.scss',
 			output: 'static/bundle',
 			filename: 'back-to-top.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/5-modules/blocks/non-critical-search-styles.scss',
 			output: 'static/bundle',
 			filename: 'non-critical-search-styles.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/5-modules/blocks/about-me.scss',
 			output: 'static/bundle',
 			filename: 'theme-block-about-me.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/5-modules/blocks/share-box.scss',
 			output: 'static/bundle',
 			filename: 'theme-block-share-box.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/admin-frontend.scss',
 			output: 'static/bundle',
 			filename: 'admin-frontend.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/3-actions/no-scripts.scss',
 			output: 'static/bundle',
 			filename: 'no-scripts.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/8-integrations/forminator/main.scss',
 			output: 'static/bundle',
 			filename: 'forminator.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/8-integrations/jet-woo-builder.scss',
 			output: 'static/bundle',
 			filename: 'jet-woo-builder.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/8-integrations/tribe-events.scss',
 			output: 'static/bundle',
 			filename: 'tribe-events.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/8-integrations/getwid.scss',
 			output: 'static/bundle',
 			filename: 'getwid.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/8-integrations/brizy.scss',
 			output: 'static/bundle',
 			filename: 'brizy.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/8-integrations/beaver.scss',
 			output: 'static/bundle',
 			filename: 'beaver.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/8-integrations/divi.scss',
 			output: 'static/bundle',
 			filename: 'divi.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		// {
 		// 	input: 'static/sass/frontend/8-integrations/vc.scss',
 		// 	output: 'static/bundle',
 		// 	filename: 'vc.min',
-		// 	// header: buildProcess.headerFor(false, data),
 		// },
 
 		{
 			input: 'static/sass/frontend/8-integrations/cf-7.scss',
 			output: 'static/bundle',
 			filename: 'cf-7.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		// {
 		// 	input: 'static/sass/frontend/8-integrations/fluent-form.scss',
 		// 	output: 'static/bundle',
 		// 	filename: 'fluent-form.min',
-		// 	// header: buildProcess.headerFor(false, data),
 		// },
 
 		{
 			input: 'static/sass/frontend/8-integrations/stackable.scss',
 			output: 'static/bundle',
 			filename: 'stackable.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/8-integrations/qubely.scss',
 			output: 'static/bundle',
 			filename: 'qubely.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/8-integrations/bbpress.scss',
 			output: 'static/bundle',
 			filename: 'bbpress.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/8-integrations/buddypress.scss',
 			output: 'static/bundle',
 			filename: 'buddypress.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/8-integrations/wpforms.scss',
 			output: 'static/bundle',
 			filename: 'wpforms.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/8-integrations/dokan.scss',
 			output: 'static/bundle',
 			filename: 'dokan.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/non-critical-styles.scss',
 			output: 'static/bundle',
 			filename: 'non-critical-styles.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/8-integrations/elementor.scss',
 			output: 'static/bundle',
 			filename: 'elementor-frontend.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/8-integrations/woocommerce/integrations/elementor.scss',
 			output: 'static/bundle',
 			filename: 'elementor-woocommerce-frontend.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/8-integrations/tutor/main.scss',
 			output: 'static/bundle',
 			filename: 'tutor.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/8-integrations/woocommerce/main.scss',
 			output: 'static/bundle',
 			filename: 'woocommerce.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/8-integrations/woocommerce/cart-header-element-lazy.scss',
 			output: 'static/bundle',
 			filename: 'cart-header-element-lazy.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/8-integrations/woocommerce/blocks/main-cart-checkout-blocks.scss',
 			output: 'static/bundle',
 			filename: 'woocommerce-cart-checkout-blocks.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/8-integrations/page-scroll-to-id.scss',
 			output: 'static/bundle',
 			filename: 'page-scroll-to-id.min',
-			// header: buildProcess.headerFor(false, data),
+		},
+
+		{
+			input: 'static/sass/frontend/8-integrations/eventkoi.scss',
+			output: 'static/bundle',
+			filename: 'eventkoi.min',
 		},
 
 		{
 			input: 'static/sass/frontend/6-layout/sidebar/main.scss',
 			output: 'static/bundle',
 			filename: 'sidebar.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/5-modules/share-box/main.scss',
 			output: 'static/bundle',
 			filename: 'share-box.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/4-components/flexy.scss',
 			output: 'static/bundle',
 			filename: 'flexy.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/5-modules/comments.scss',
 			output: 'static/bundle',
 			filename: 'comments.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/4-components/author-box.scss',
 			output: 'static/bundle',
 			filename: 'author-box.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/frontend/4-components/posts-nav.scss',
 			output: 'static/bundle',
 			filename: 'posts-nav.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/backend/editor/main.scss',
 			output: 'static/bundle',
 			filename: 'editor.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/backend/editor/iframe.scss',
 			output: 'static/bundle',
 			filename: 'editor-iframe.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
@@ -480,21 +437,18 @@ var options = {
 			input: 'static/sass/backend/customizer/main.scss',
 			output: 'static/bundle',
 			filename: 'customizer-controls.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/backend/admin.scss',
 			output: 'static/bundle',
 			filename: 'options.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'admin/dashboard/static/sass/main.scss',
 			output: 'admin/dashboard/static/bundle',
 			filename: 'main.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		// rtl
@@ -502,39 +456,32 @@ var options = {
 			input: 'static/sass/frontend/main-rtl.scss',
 			output: 'static/bundle',
 			filename: 'main-rtl.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/backend/editor/main-rtl.scss',
 			output: 'static/bundle',
 			filename: 'editor-rtl.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/backend/customizer/main-rtl.scss',
 			output: 'static/bundle',
 			filename: 'customizer-controls-rtl.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'static/sass/backend/admin-rtl.scss',
 			output: 'static/bundle',
 			filename: 'options-rtl.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 
 		{
 			input: 'admin/dashboard/static/sass/main-rtl.scss',
 			output: 'admin/dashboard/static/bundle',
 			filename: 'main-rtl.min',
-			// header: buildProcess.headerFor(false, data),
 		},
 	],
-
-	browserSyncEnabled: true,
 
 	sassWatch: [
 		'static/sass/**/*.scss',
@@ -563,9 +510,7 @@ var options = {
 		*/
 	],
 
-	webpackResolveAliases: {
-		'ct-log': 'ct-wp-js-log',
-	},
+	webpackResolveAliases: {},
 
 	babelAdditionalPlugins: [
 		'babel-plugin-lodash',
@@ -574,7 +519,7 @@ var options = {
 
 	modulesToCompileWithBabel: [
 		'@wordpress/element',
-		'flexy',
+		'@creative-themes/flexy',
 		'@wordpress/components',
 		'ct-wordpress-helpers',
 	],
@@ -587,6 +532,7 @@ var options = {
 		'./build_tmp/build/child-theme/',
 		'./build_tmp/build/composer.json',
 		'./build_tmp/build/yarn.lock',
+		'./build_tmp/build/package-lock.json',
 		'./build_tmp/build/wp-cli.yml',
 		'./build_tmp/build/.babelrc',
 		'./build_tmp/build/docs',
@@ -597,7 +543,8 @@ var options = {
 		'./build_tmp/build/ruleset.xml',
 		'./build_tmp/build/tests',
 		'./build_tmp/build/scripts',
-		'./build_tmp/build/inc/browser-sync.php',
+		'./build_tmp/build/inc/sass-live-sync.php',
+		'./build_tmp/build/sass-live-sync.js',
 
 		'./build_tmp/build/composer.lock',
 		'./build_tmp/build/composer.json',
@@ -616,39 +563,29 @@ var options = {
 
 buildProcess.registerTasks(gulp, options)
 
-gulp.task(
-	'gettext-generate-js',
-	shell.task(
-		[
-			'cross-env NODE_ENV_GETTEXT=true NODE_ENV=production yarn gulp build --silent',
-		],
-		{
-			ignoreErrors: true,
-			verbose: true,
-		}
-	)
-)
+gulp.task('gettext-generate-js', (done) => {
+	try {
+		execSync(
+			'cross-env NODE_ENV_GETTEXT=true NODE_ENV=production npx gulp build --silent',
+			{ stdio: 'inherit' }
+		)
+	} catch (error) {
+		console.warn('Warning: gettext-generate-js failed:', error.message)
+	}
+	done()
+})
 
 gulp.task(
 	'gettext-generate',
-	gulp.series(
-		'gettext-generate-js',
-		'gettext-generate:php',
-		shell.task(
-			[
+	gulp.series('gettext-generate-js', 'gettext-generate:php', (done) => {
+		try {
+			execSync(
 				"msgcat languages/blocksy-php.pot languages/ct-js.pot | grep -v '#-#-#-#' > ./languages/blocksy.pot && rm ./languages/blocksy-php.pot ./languages/ct-js.pot",
-			],
-			{
-				ignoreErrors: true,
-				verbose: true,
-			}
-		)
-
-		/*
-		shell.task(['yarn build'], {
-			ignoreErrors: true,
-			verbose: true,
-		})
-		*/
-	)
+				{ stdio: 'inherit', shell: '/bin/bash' }
+			)
+		} catch (error) {
+			console.warn('Warning: msgcat merge failed:', error.message)
+		}
+		done()
+	})
 )

@@ -143,6 +143,13 @@ const getVariables = ({ itemId, panelType }) => ({
 		responsive: true,
 	},
 
+	ls_border_radius: {
+		selector: assembleSelector(getRootSelectorFor({ panelType, itemId })),
+		type: 'spacing',
+		variable: 'items-border-radius',
+		responsive: true,
+	},
+
 	// default state
 	ls_label_color: [
 		{
@@ -166,32 +173,6 @@ const getVariables = ({ itemId, panelType }) => ({
 				})
 			),
 			variable: 'theme-link-hover-color',
-			type: 'color:hover',
-		},
-	],
-
-	ls_custom_icon_color: [
-		{
-			selector: assembleSelector(
-				mutateSelector({
-					selector: getRootSelectorFor({ panelType, itemId }),
-					operation: 'suffix',
-					to_add: '.ct-language',
-				})
-			),
-			variable: 'theme-icon-color',
-			type: 'color:default',
-		},
-
-		{
-			selector: assembleSelector(
-				mutateSelector({
-					selector: getRootSelectorFor({ panelType, itemId }),
-					operation: 'suffix',
-					to_add: '.ct-language',
-				})
-			),
-			variable: 'theme-icon-hover-color',
 			type: 'color:hover',
 		},
 	],
@@ -233,42 +214,6 @@ const getVariables = ({ itemId, panelType }) => ({
 		},
 	],
 
-	transparent_ls_custom_icon_color: [
-		{
-			selector: assembleSelector(
-				mutateSelector({
-					selector: mutateSelector({
-						selector: getRootSelectorFor({ panelType, itemId }),
-						operation: 'suffix',
-						to_add: '.ct-language',
-					}),
-					operation: 'between',
-					to_add: '[data-transparent-row="yes"]',
-				})
-			),
-
-			variable: 'theme-icon-color',
-			type: 'color:default',
-		},
-
-		{
-			selector: assembleSelector(
-				mutateSelector({
-					selector: mutateSelector({
-						selector: getRootSelectorFor({ panelType, itemId }),
-						operation: 'suffix',
-						to_add: '.ct-language',
-					}),
-					operation: 'between',
-					to_add: '[data-transparent-row="yes"]',
-				})
-			),
-
-			variable: 'theme-icon-hover-color',
-			type: 'color:hover',
-		},
-	],
-
 	// sticky state
 	sticky_ls_label_color: [
 		{
@@ -300,40 +245,6 @@ const getVariables = ({ itemId, panelType }) => ({
 				})
 			),
 			variable: 'theme-link-hover-color',
-			type: 'color:hover',
-		},
-	],
-
-	sticky_ls_custom_icon_color: [
-		{
-			selector: assembleSelector(
-				mutateSelector({
-					selector: mutateSelector({
-						selector: getRootSelectorFor({ panelType, itemId }),
-						operation: 'suffix',
-						to_add: '.ct-language',
-					}),
-					operation: 'between',
-					to_add: '[data-sticky*="yes"]',
-				})
-			),
-			variable: 'theme-icon-color',
-			type: 'color:default',
-		},
-
-		{
-			selector: assembleSelector(
-				mutateSelector({
-					selector: mutateSelector({
-						selector: getRootSelectorFor({ panelType, itemId }),
-						operation: 'suffix',
-						to_add: '.ct-language',
-					}),
-					operation: 'between',
-					to_add: '[data-sticky*="yes"]',
-				})
-			),
-			variable: 'theme-icon-hover-color',
 			type: 'color:hover',
 		},
 	],

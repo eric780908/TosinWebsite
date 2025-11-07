@@ -193,6 +193,13 @@ const DemoToInstall = ({ location, navigate }) => {
 
 				setCurrentDemo(`${properDemoName}:hide`)
 			}}
+			onDismissed={() => {
+				// Ideally, we should unmount this component fully when installer is done
+				// and have the state reset on mount.
+				//
+				// But, due to animation limitations in Overlay component, this will do.
+				setCurrentConfigurationStep(0)
+			}}
 			render={() => (
 				<div className="ct-modal-content ct-demo-step-container">
 					<div className="ct-current-step">

@@ -15,20 +15,6 @@ $(document.body).on('should_send_ajax_request.adding_to_cart', (e, button) => {
 })
 
 export const maybeHandleArchiveSwatches = (el) => {
-	/*
-	 * Templates for woo scripts
-	 * assets/js/frontend/add-to-cart-variation.js
-	 */
-	if (!document.querySelector('#tmpl-variation-template')) {
-		document.body.insertAdjacentHTML(
-			'beforeend',
-			`
-				<script type="text/template" id="tmpl-variation-template"></script>
-				<script type="text/template" id="tmpl-unavailable-variation-template"></script>
-			`
-		)
-	}
-
 	if (
 		!el.closest('.product') ||
 		!el.closest('.product').closest('.products')

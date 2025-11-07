@@ -201,6 +201,14 @@ export const mount = (formEl, args = {}) => {
 			return
 		}
 
+		if (e.target.dataset?.minLength) {
+			const minLength = parseInt(e.target.dataset.minLength, 10)
+
+			if (e.target.value.trim().length < minLength) {
+				return
+			}
+		}
+
 		formEl.classList.add('ct-searching')
 
 		const requestUrl = getRequestUrl({
