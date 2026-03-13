@@ -1,0 +1,15 @@
+# 忽略 Python 產生的暫存檔
+__pycache__/
+*.py[cod]
+
+# 自動化處理腳本與設定檔
+clean_static.py
+.env
+
+# 開發筆記與流程紀錄
+GEMINI.md
+*.md
+
+
+# Windows 系統暫存檔 (建議加入)
+Thumbs.db
